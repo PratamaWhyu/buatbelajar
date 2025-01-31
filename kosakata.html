@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kosakata</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+  </head>
+  <body>
+    <!-- NAVBAR-->
+    <nav class="bg-gray-800">
+      <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div class="relative flex h-16 items-center justify-center">
+          <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+            <!-- Mobile menu button -->
+            <button
+              id="mobile-menu-button"
+              type="button"
+              class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset"
+              aria-controls="mobile-menu"
+              aria-expanded="false"
+            >
+              <span class="absolute -inset-0.5"></span>
+              <span class="sr-only">Open main menu</span>
+              <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              </svg>
+              <svg class="hidden size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <div class="flex flex-1 items-center justify-center">
+            <div class="hidden sm:block">
+              <div class="flex space-x-4">
+                <a href="index.html" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Home</a>
+                <a href="kosakata.html" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" aria-current="page"
+                aria-current="page">Kosakata</a>
+                <a href="polakalimat.html" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Pola Kalimat</a>
+                <a href="quiz.html" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Quiz</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Mobile menu -->
+      <div class="sm:hidden hidden" id="mobile-menu">
+        <div class="space-y-1 px-2 pt-2 pb-3">
+          <a href="index.html" class="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Home</a>
+          <a href="kosakata.html" class="block rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" >Kosakata</a>
+          <a href="polakalimat.html" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Pola Kalimat</a>
+          <a href="quiz.html" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Quiz</a>
+        </div>
+      </div>
+    </nav>
+
+    <!--END NAVBAR-->
+
+    <div class=" m-8">
+      <label for="babSelector" class="text-lg font-bold">Pilih Bab:</label>
+      <select id="babSelector" class="border p-2 rounded">
+        <option value="bab1">Bab 1</option>
+        <option value="bab2">Bab 2</option>
+        <option value="bab3">Bab 3</option>
+        <option value="bab4">Bab 4</option>
+        <option value="bab5">Bab 5</option>
+        <option value="bab6">Bab 6</option>
+        <option value="bab7">Bab 7</option>
+        <option value="bab8">Bab 8</option>
+        <option value="bab9">Bab 9</option>
+        <option value="bab10">Bab 10</option>
+        <option value="bab11">Bab 11</option>
+        <option value="bab12">Bab 12</option>
+        <option value="bab13">Bab 13</option>
+        <option value="bab14">Bab 14</option>
+        <option value="bab15">Bab 15</option>
+      </select>
+    </div>
+
+    <div class="rounded-lg border bg-gray-500 m-8 ">
+      <div class="overflow-x-auto rounded-t-lg">
+        <table id="kosakata-table" class="min-w-full text-center divide-y-2 divide-gray-200 bg-white text-sm">
+          <thead class="bg-blue-500 text-white text-xl text-center">
+            <tr>
+              <th class="whitespace-nowrap px-4 py-2 font-bold text-center">Kana</th>
+              <th class="whitespace-nowrap px-4 py-2 font-bold text-center">Kanji</th>
+              <th class="whitespace-nowrap px-4 py-2 font-bold text-center">Arti</th>
+            </tr>
+          </thead>
+          <tbody id="kosakata-body" class="divide-y divide-gray-200 text-center"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+        let tableBody = document.getElementById("kosakata-body");
+        let babSelector = document.getElementById("babSelector");
+      
+        // Ambil data JSON
+        fetch("kosakata.json")
+          .then((response) => response.json())
+          .then((data) => {
+            function updateTable(bab) {
+              tableBody.innerHTML = ""; // Hapus data lama
+              let rows = ""; // Gunakan variabel untuk menampung semua baris sebelum di-insert
+      
+              if (data[bab]) {
+                data[bab].forEach((item, index) => {
+                  rows += `<tr class="text-center ${index % 15 === 0 ? 'odd:bg-gray-100' : 'even:bg-gray-200'}">
+                    <td class="whitespace-nowrap px-4 py-2 font-medium">${item.kana}</td>
+                    <td class="whitespace-nowrap px-4 py-2">${item.kanji}</td>
+                    <td class="whitespace-nowrap px-4 py-2">${item.arti}</td>
+                  </tr>`;
+                });
+      
+                tableBody.innerHTML = rows; // Masukkan semua baris sekaligus
+              } else {
+                tableBody.innerHTML = `<tr><td colspan="3" class="text-center text-red-500">Data tidak ditemukan</td></tr>`;
+              }
+            }
+      
+            // Tampilkan bab pertama saat pertama kali
+            updateTable("bab1");
+      
+            // Ubah isi tabel saat dropdown berubah
+            babSelector.addEventListener("change", function () {
+              updateTable(this.value);
+            });
+          })
+          .catch((error) => console.error("Error fetching JSON:", error));
+      
+        // Responsive mobile menu
+        document
+          .getElementById("mobile-menu-button")
+          .addEventListener("click", function () {
+            document.getElementById("mobile-menu").classList.toggle("hidden");
+          });
+      </script>
+      
+
+    <!-- -->
+
+    <!---->
+  </body>
+</html>
